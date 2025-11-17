@@ -12,6 +12,5 @@
 <h1>To-do:</h1>
 <ol>
   <li>Add prompt for pack resolution.</li>
-  <li>Better code documentation.</li>
   <li>Have a full release executable.</li>
 </ol>
