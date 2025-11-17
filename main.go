@@ -18,17 +18,20 @@ import (
 const PACK_RESULUTION int = 64
 
 func main() {
+	//Desaturate and scales pictures
 	if err := CleanTargetPictures(); err != nil {
 		log.Fatal(err)
 	}
 
 	packName := ""
 
+	//Get name of pack
 	err := PromptUser("Enter Pack Name: ", &packName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	//create folder layout
 	packName, err = CreateTexturesPackFolder(packName)
 	if err != nil {
 		log.Fatal(err)
@@ -66,6 +69,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	//create target images
 	err = GenerateTargetImages("./1.21.9-Template/assets/minecraft/textures/block", relaitvePath)
 	if err != nil {
 		log.Fatal(err)
@@ -74,6 +78,7 @@ func main() {
 	fmt.Println("Done! :)")
 }
 
+//Desaturates and resizes the photos
 func CleanTargetPictures() error {
 	entries, err := os.ReadDir("./pictures")
 	if err != nil {
@@ -98,12 +103,14 @@ func CleanTargetPictures() error {
 	return nil
 }
 
+//Prompts the user for a string reply
 func PromptUser(prompt string, output *string) error {
 	fmt.Printf("%s", prompt)
 	_, err := fmt.Scanln(output)
 	return err
 }
 
+//creates a directory and returns the path
 func CreateDir(location, dirName string) (string, error) {
 	location += "/" + dirName
 
@@ -115,6 +122,7 @@ func CreateDir(location, dirName string) (string, error) {
 	return location, nil
 }
 
+//creates the main pack directory
 func CreateTexturesPackFolder(targetPackName string) (string, error) {
 	err := os.Mkdir(targetPackName, os.ModePerm)
 
@@ -146,6 +154,7 @@ func CreateTexturesPackFolder(targetPackName string) (string, error) {
 	return CreateTexturesPackFolder(targetPackName)
 }
 
+//copies a file from one location to another
 func CopyFile(src, dst string) error {
 	// Open the source file
 	sourceFile, err := os.Open(src)
@@ -178,6 +187,7 @@ func CopyFile(src, dst string) error {
 	return nil
 }
 
+//generates the final texture images and puts the in the dist directory
 func GenerateTargetImages(textureNameLocation, dist string) error {
 	targetPics, err := os.ReadDir("./targetPictures")
 	if err != nil {
@@ -225,6 +235,7 @@ func GenerateTargetImages(textureNameLocation, dist string) error {
 	return nil
 }
 
+//Overlays a photo over another while taking into acount the transparency of the background
 func OverlayWithHoles(srcImg, overlayImg image.Image) *image.NRGBA {
 	output := imaging.New(PACK_RESULUTION, PACK_RESULUTION, color.Transparent)
 
